@@ -1,0 +1,95 @@
+local newGUI = Instance.new("ScreenGui")
+newGUI.Name = "beastMODE"
+newGUI.Parent = game.Players.LocalPlayer.PlayerGui
+newGUI.ResetOnSpawn = false
+newGUI.IgnoreGuiInset = true
+
+local window = Instance.new("Frame")
+window.Parent = newGUI
+window.AnchorPoint = Vector2.new(0.5,0)
+window.Size = UDim2.new(0.2,0,0.2,0)
+window.Position = UDim2.new(0.5,0,0,0)
+
+local background = Instance.new("ImageLabel")
+background.Parent = window
+background.Size = UDim2.new(1,0,1,0)
+background.Image = "http://www.roblox.com/asset/?id=3252719710"
+
+local top = Instance.new("TextLabel")
+top.Parent = window
+top.Name = "top"
+top.BackgroundTransparency = 1
+top.TextColor3 = Color3.new(0,1,1)
+top.TextStrokeTransparency = 0
+top.Text = "Femboy Power <3"
+top.Size = UDim2.new(1,0,0.5,0)
+top.TextScaled = true
+top.Font = Enum.Font.IndieFlower
+
+local bot = Instance.new("TextLabel")
+bot.Parent = window
+bot.Name = "bot"
+bot.BackgroundTransparency = 1
+bot.TextColor3 = Color3.new(0,1,1)
+bot.TextStrokeTransparency = 0
+bot.Position = UDim2.new(0,0,0.5,0)
+bot.Size = UDim2.new(1,0,0.5,0)
+bot.TextScaled = true
+bot.Font = Enum.Font.IndieFlower
+bot.Text = "Kwil Awra </3 [R]"
+
+if game.ReplicatedStorage.GameRemotes:FindFirstChild("RequestDamage") then -- No more fall damage <333
+game.ReplicatedStorage.GameRemotes.RequestDamage:Destroy()
+end
+
+game.Lighting.Brightness = 4
+game.Lighting.Ambient = Color3.fromRGB(128,128,128)
+
+function attack(player)
+local remoteToFire = game.ReplicatedStorage.GameRemotes.Attack
+if not(remoteToFire) then
+top.Text = "ERROR, REMOTE EVENT MISSING."
+else
+remoteToFire:InvokeServer(player.Character)
+end
+end
+
+local localPlayer = game.Players.LocalPlayer
+local mouse = localPlayer:GetMouse()
+local botActive = false
+
+
+mouse.KeyDown:Connect(function(key)
+if key == "r" then
+if botActive == false then
+botActive = true
+bot.Text = "Kwil Awra <3 [R]"
+else
+botActive = false
+bot.Text = "Kwil Awra </3 [R]"
+end
+end
+end)
+
+while true do
+wait (0.05)
+if botActive ~= false then
+    local closestTarget = "nobody"
+    local distanceFromLocal = 45
+for i,v in pairs (game.Players:GetPlayers()) do
+if v ~= localPlayer and v then
+if v.Character and v.Character:FindFirstChild("HumanoidRootPart") and localPlayer:DistanceFromCharacter(v.Character.HumanoidRootPart.Position) < 45 and localPlayer:DistanceFromCharacter(v.Character.HumanoidRootPart.Position) ~= 0 then
+if localPlayer:DistanceFromCharacter(v.Character.HumanoidRootPart.Position) < distanceFromLocal then
+if v.Character.Humanoid.Health > 0 then
+    closestTarget = v
+    distanceFromLocal = localPlayer:DistanceFromCharacter(v.Character.HumanoidRootPart.Position)
+end
+end
+end
+end
+end
+if closestTarget ~= "nobody" then
+    attack (closestTarget)
+end
+end
+end
