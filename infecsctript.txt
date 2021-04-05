@@ -1,0 +1,7 @@
+for i,v in next, getgc(true) do
+if typeof(v) == "table" and rawget(v, 'Damage') then
+   v.Ammo = math.huge
+   v.Recoil = 0
+   v.Spread = 0
+end
+end
